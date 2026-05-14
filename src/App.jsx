@@ -57,11 +57,11 @@ function Field({ label, error, children, note }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
       <label style={{
         fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase',
-        color: error ? '#F0A095' : 'rgba(200,240,74,0.55)',
-        fontWeight: 400, display: 'flex', alignItems: 'center', gap: '8px',
+        color: error ? '#F0A095' : 'rgba(200,240,74,0.78)',
+        fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px',
       }}>
         {label}
-        {note && <span style={{ color: 'rgba(240,242,245,0.25)', textTransform: 'none', letterSpacing: 0, fontSize: '11px' }}>{note}</span>}
+        {note && <span style={{ color: 'rgba(240,242,245,0.48)', textTransform: 'none', letterSpacing: 0, fontSize: '11px' }}>{note}</span>}
       </label>
       {children}
       {error && (
@@ -79,8 +79,8 @@ function SelectInput({ value, onChange, options, disabled }) {
     <select value={value} onChange={e => onChange(e.target.value)} disabled={disabled}
       onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
       style={{
-        background: 'rgba(255,255,255,0.035)',
-        border: `0.5px solid ${focused ? 'rgba(200,240,74,0.4)' : 'rgba(255,255,255,0.08)'}`,
+        background: 'rgba(255,255,255,0.065)',
+        border: `0.5px solid ${focused ? 'rgba(200,240,74,0.62)' : 'rgba(255,255,255,0.16)'}`,
         borderRadius: '8px', color: '#F0F2F5', fontFamily: "'Syne', sans-serif",
         fontSize: '14px', fontWeight: 300, padding: '13px 16px', outline: 'none',
         width: '100%', cursor: disabled ? 'not-allowed' : 'pointer',
@@ -101,6 +101,18 @@ function makeTrace(status, label, msg) { return { status, label, msg }; }
 
 const STEPS = { FORM: 'form', CLARIFY: 'clarify', RUNNING: 'running', RESULT: 'result', FALLBACK: 'fallback' };
 const FIXED_CITY = 'Bangalore';
+const NOTE_SUGGESTIONS = [
+  'near Koramangala, outdoors, not too crowded',
+  'BTM start, easy travel, good food stop',
+  'HSR layout, walking + coffee, no touristy spots',
+  'Indiranagar side, something spontaneous',
+];
+const SURPRISE_PRESETS = [
+  { mood: 'adventurous', interests: ['walks', 'nature', 'food'], constraints: ['outdoors'] },
+  { mood: 'creative', interests: ['art', 'coffee', 'books'], constraints: ['avoid crowds'] },
+  { mood: 'chill and relaxed', interests: ['coffee', 'walks', 'food'], constraints: ['avoid crowds'] },
+  { mood: 'social', interests: ['music', 'markets', 'food'], constraints: [] },
+];
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
@@ -119,6 +131,7 @@ export default function App() {
   const [prefs, setPrefs] = useState(null);
   const [fallback, setFallback] = useState(null);
   const [clarifyQuestions, setClarifyQuestions] = useState([]);
+  const notePlaceholder = NOTE_SUGGESTIONS[(interests.length + constraints.length + Number(hours)) % NOTE_SUGGESTIONS.length];
 
   const toggleInterest = useCallback((val) => {
     setInterests(prev => prev.includes(val) ? prev.filter(v => v !== val) : [...prev, val]);
@@ -247,6 +260,15 @@ export default function App() {
     runPlan();
   }
 
+  function handleSurprise() {
+    const preset = SURPRISE_PRESETS[Math.floor(Math.random() * SURPRISE_PRESETS.length)];
+    setMood(preset.mood);
+    setInterests(preset.interests);
+    setConstraints(preset.constraints);
+    setFreetext(prev => prev.trim() || 'surprise me with something that feels fresh but manageable');
+    setErrors({});
+  }
+
   function handleClarifySubmit(answers) {
     const extraNotes = Object.values(answers || {}).map(v => String(v).trim()).filter(Boolean).join('\n');
     const mergedNotes = [freetext.trim(), extraNotes].filter(Boolean).join('\n');
@@ -267,19 +289,18 @@ export default function App() {
 
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflowX: 'hidden' }}>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: 'url(https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=1800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center 40%', filter: 'brightness(0.3) saturate(0.8)' }} />
-      <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'linear-gradient(to bottom, rgba(10,12,16,0.5) 0%, rgba(10,12,16,0.2) 40%, rgba(10,12,16,0.7) 70%, rgba(10,12,16,0.95) 100%)' }} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, backgroundImage: 'linear-gradient(rgba(0,0,0,0.42), rgba(0,0,0,0.54)), url(https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=1800&q=80)', backgroundSize: 'cover', backgroundPosition: 'center 40%', filter: 'saturate(0.9)' }} />
       <div style={{ position: 'fixed', inset: 0, zIndex: 2, pointerEvents: 'none', opacity: 0.04, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
 
-      <div style={{ position: 'relative', zIndex: 3, maxWidth: '860px', margin: '0 auto', padding: '0 28px 120px' }}>
+      <div className="app-shell" style={{ position: 'relative', zIndex: 3, maxWidth: '860px', margin: '0 auto', padding: '0 28px 120px' }}>
 
         {/* Header */}
-        <header style={{ textAlign: 'center', padding: '68px 0 52px', borderBottom: '0.5px solid rgba(255,255,255,0.07)', marginBottom: '60px' }}>
+        <header className="hero" style={{ textAlign: 'center', padding: '68px 0 52px', borderBottom: '0.5px solid rgba(255,255,255,0.14)', marginBottom: '60px' }}>
           <div style={{ marginBottom: '28px', display: 'flex', justifyContent: 'center' }}><Logo /></div>
           <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(40px, 7vw, 72px)', fontWeight: 300, lineHeight: 1.05, color: '#F0F2F5', letterSpacing: '-0.01em', margin: 0 }}>
             Plan <em style={{ fontStyle: 'italic', color: '#C8F04A' }}>the perfect</em><br />weekend, for you
           </h1>
-          <p style={{ marginTop: '16px', fontSize: '15px', color: 'rgba(240,242,245,0.4)', fontWeight: 300, letterSpacing: '0.02em', lineHeight: 1.65 }}>
+          <p style={{ marginTop: '16px', fontSize: '15px', color: 'rgba(240,242,245,0.68)', fontWeight: 350, letterSpacing: '0.02em', lineHeight: 1.65 }}>
             Your mood. Your kind of day. Bangalore.
           </p>
         </header>
@@ -288,12 +309,12 @@ export default function App() {
         {(step === STEPS.FORM || step === STEPS.CLARIFY || step === STEPS.RUNNING || step === STEPS.FALLBACK) && (
           <section>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px', marginBottom: '18px' }}>
-              <Field label="Your city">
-                <div style={{ background: 'rgba(255,255,255,0.025)', border: '0.5px solid rgba(200,240,74,0.15)', borderRadius: '8px', color: 'rgba(200,240,74,0.7)', fontFamily: "'Syne', sans-serif", fontSize: '14px', fontWeight: 400, padding: '13px 16px', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Field label="Where are you?">
+                <div style={{ background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(200,240,74,0.3)', borderRadius: '8px', color: 'rgba(200,240,74,0.9)', fontFamily: "'Syne', sans-serif", fontSize: '14px', fontWeight: 500, padding: '13px 16px', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   Bangalore
                 </div>
               </Field>
-              <Field label="Available time">
+              <Field label="Free time?">
                 <SelectInput value={hours} onChange={setHours} disabled={isRunning} options={[
                   { value: '2', label: '2 hours' }, { value: '3', label: '3 hours' },
                   { value: '4', label: '4 hours' }, { value: '5', label: '5 hours' },
@@ -305,7 +326,7 @@ export default function App() {
 
             {/* Budget */}
             <div style={{ marginBottom: '18px' }}>
-              <Field label="Budget">
+              <Field label="Budget?">
                 <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '34px', fontWeight: 300, color: '#C8F04A', letterSpacing: '-0.01em', marginBottom: '10px' }}>
                   Rs.{parseInt(budget).toLocaleString('en-IN')}
                 </div>
@@ -322,7 +343,7 @@ export default function App() {
 
             {/* Mood */}
             <div style={{ marginBottom: '18px' }}>
-              <Field label="Your mood right now" error={errors.mood}>
+              <Field label="What's the vibe?" error={errors.mood}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '3px' }}>
                   {MOOD_OPTIONS.map(o => <Chip key={o.value} label={o.label} selected={mood === o.value} onClick={() => selectMood(o.value)} disabled={isRunning} />)}
                 </div>
@@ -331,7 +352,7 @@ export default function App() {
 
             {/* Interests */}
             <div style={{ marginBottom: '18px' }}>
-              <Field label="Interests (pick any)" error={errors.interests}>
+              <Field label="What sounds fun?" error={errors.interests}>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '3px' }}>
                   {INTEREST_OPTIONS.map(o => <Chip key={o.value} label={o.label} selected={interests.includes(o.value)} onClick={() => toggleInterest(o.value)} disabled={isRunning} />)}
                 </div>
@@ -340,7 +361,7 @@ export default function App() {
 
             {/* Constraints */}
             <div style={{ marginBottom: '18px' }}>
-              <Field label="Constraints" note="optional">
+              <Field label="Any hard no's?" note="optional">
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '3px' }}>
                   {CONSTRAINT_OPTIONS.map(o => <Chip key={o.value} label={o.label} selected={constraints.includes(o.value)} onClick={() => toggleConstraint(o.value)} disabled={isRunning} />)}
                 </div>
@@ -349,25 +370,25 @@ export default function App() {
 
             {/* Free text */}
             <div style={{ marginBottom: '0' }}>
-              <Field label="Anything else?" note="be specific — this shapes your plan">
+              <Field label="Extra context?" note="this shapes your plan">
                 <textarea
                   value={freetext}
                   onChange={e => setFreetext(e.target.value)}
-                  placeholder="e.g. I hate parking, prefer north Bangalore, not too hungry just want coffee, avoid anything touristy…"
+                  placeholder={`e.g. ${notePlaceholder}`}
                   disabled={isRunning}
                   style={{
-                    width: '100%', background: 'rgba(255,255,255,0.035)',
-                    border: freetext.trim() ? '0.5px solid rgba(200,240,74,0.3)' : '0.5px solid rgba(255,255,255,0.08)',
+                    width: '100%', background: 'rgba(255,255,255,0.065)',
+                    border: freetext.trim() ? '0.5px solid rgba(200,240,74,0.5)' : '0.5px solid rgba(255,255,255,0.16)',
                     borderRadius: '8px', color: '#F0F2F5', fontFamily: "'Syne', sans-serif",
                     fontSize: '14px', fontWeight: 300, padding: '13px 16px', outline: 'none',
                     resize: 'vertical', minHeight: '76px', lineHeight: 1.65,
                     transition: 'border-color 0.22s', opacity: isRunning ? 0.5 : 1,
                   }}
-                  onFocus={e => { if (!isRunning) e.target.style.borderColor = 'rgba(200,240,74,0.45)'; }}
-                  onBlur={e => { e.target.style.borderColor = freetext.trim() ? 'rgba(200,240,74,0.3)' : 'rgba(255,255,255,0.08)'; }}
+                  onFocus={e => { if (!isRunning) e.target.style.borderColor = 'rgba(200,240,74,0.68)'; }}
+                  onBlur={e => { e.target.style.borderColor = freetext.trim() ? 'rgba(200,240,74,0.5)' : 'rgba(255,255,255,0.16)'; }}
                 />
                 {freetext.trim() && !isRunning && (
-                  <div style={{ fontSize: '11px', color: 'rgba(200,240,74,0.45)', marginTop: '5px', letterSpacing: '0.05em' }}>
+                  <div style={{ fontSize: '11px', color: 'rgba(200,240,74,0.68)', marginTop: '5px', letterSpacing: '0.05em' }}>
                     Your notes will shape every pick in the plan
                   </div>
                 )}
@@ -375,13 +396,22 @@ export default function App() {
             </div>
 
             {/* Submit */}
+            <div className="cta-row" style={{ display: 'grid', gridTemplateColumns: '1fr 180px', gap: '12px', marginTop: '32px' }}>
             <button type="button" onClick={handleSubmit} disabled={isRunning}
-              style={{ width: '100%', marginTop: '32px', padding: '20px 40px', background: 'transparent', border: '0.5px solid rgba(200,240,74,0.4)', borderRadius: '8px', color: 'rgba(200,240,74,0.85)', fontFamily: "'Cormorant Garamond', serif", fontSize: '20px', fontStyle: 'italic', fontWeight: 300, cursor: isRunning ? 'not-allowed' : 'pointer', letterSpacing: '0.03em', transition: 'all 0.3s', opacity: isRunning ? 0.6 : 1 }}
+              style={{ width: '100%', padding: '20px 40px', background: 'rgba(200,240,74,0.08)', border: '0.5px solid rgba(200,240,74,0.45)', borderRadius: '8px', color: 'rgba(200,240,74,0.92)', fontFamily: "'Cormorant Garamond', serif", fontSize: '22px', fontStyle: 'italic', fontWeight: 400, cursor: isRunning ? 'not-allowed' : 'pointer', letterSpacing: '0.03em', transition: 'all 0.3s', opacity: isRunning ? 0.6 : 1, boxShadow: '0 0 26px rgba(200,240,74,0.08)' }}
               onMouseEnter={e => { if (!isRunning) { e.currentTarget.style.background = 'rgba(200,240,74,0.06)'; e.currentTarget.style.borderColor = 'rgba(200,240,74,0.7)'; } }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(200,240,74,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(200,240,74,0.08)'; e.currentTarget.style.borderColor = 'rgba(200,240,74,0.45)'; }}
             >
-              {isRunning ? 'Planning your weekend…' : 'Plan my weekend'}
+              {isRunning ? 'Finding your vibe...' : 'Find my vibe'}
             </button>
+            <button type="button" onClick={handleSurprise} disabled={isRunning}
+              style={{ width: '100%', padding: '20px 18px', background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(255,255,255,0.18)', borderRadius: '8px', color: 'rgba(240,242,245,0.75)', fontFamily: "'Syne', sans-serif", fontSize: '13px', fontWeight: 500, cursor: isRunning ? 'not-allowed' : 'pointer', letterSpacing: '0.08em', textTransform: 'uppercase', transition: 'all 0.25s', opacity: isRunning ? 0.5 : 1 }}
+              onMouseEnter={e => { if (!isRunning) { e.currentTarget.style.color = '#F0F2F5'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.22)'; } }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'rgba(240,242,245,0.75)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)'; }}
+            >
+              Surprise me
+            </button>
+            </div>
           </section>
         )}
 
@@ -426,12 +456,19 @@ export default function App() {
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #C8F04A; cursor: pointer; border: 2.5px solid #0A0C10; box-shadow: 0 0 0 1.5px rgba(200,240,74,0.4); }
         input[type=range]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #C8F04A; cursor: pointer; border: 2.5px solid #0A0C10; }
         * { box-sizing: border-box; }
-        ::placeholder { color: rgba(240,242,245,0.18); }
+        ::placeholder { color: rgba(240,242,245,0.38); }
         select option { background: #0D1018; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+        @media (max-width: 620px) {
+          .app-shell { padding-left: 18px !important; padding-right: 18px !important; padding-bottom: 80px !important; }
+          .hero { padding-top: 46px !important; padding-bottom: 36px !important; margin-bottom: 38px !important; }
+          .cta-row { grid-template-columns: 1fr !important; }
+          button, select, textarea { min-height: 48px; }
+        }
       `}</style>
     </div>
   );
 }
+

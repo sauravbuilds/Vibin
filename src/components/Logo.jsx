@@ -11,22 +11,23 @@ export default function Logo({ size = 'default' }) {
     }}>
       <span style={{
         fontFamily: "'Syne', sans-serif",
-        fontWeight: 600,
-        fontSize: isSmall ? '18px' : '24px',
+        fontWeight: isSmall ? 650 : 750,
+        fontSize: isSmall ? '20px' : '28px',
         color: '#F0F2F5',
-        letterSpacing: '-0.02em',
+        letterSpacing: isSmall ? '0.01em' : '0.03em',
         lineHeight: 1,
       }}>
         vibin
       </span>
       <span style={{
-        width: isSmall ? '5px' : '7px',
-        height: isSmall ? '5px' : '7px',
+        width: isSmall ? '6px' : '8px',
+        height: isSmall ? '6px' : '8px',
         borderRadius: '50%',
         background: '#C8F04A',
         display: 'inline-block',
         flexShrink: 0,
-        marginBottom: isSmall ? '8px' : '12px',
+        marginBottom: isSmall ? '9px' : '14px',
+        boxShadow: '0 0 14px rgba(200,240,74,0.55)',
       }} />
     </div>
   );

@@ -4,6 +4,8 @@ Vibin is a simple weekend-planning app for Bangalore. It helps users create a sh
 
 The goal is not to overload the user with choices. Vibin asks a few focused questions, searches for relevant places, and returns a clean route-like plan with activities, food stops, estimated cost, and transport cost.
 
+Live app: https://vibin-xi.vercel.app/
+
 ## What It Does
 
 - Plans a weekend outing in Bangalore.
@@ -66,6 +68,22 @@ This makes the plan more realistic and easier for the user to manage.
    Users should be able to mark their plan as public or private.
 
    If a plan is public, other users with a similar route, mood, or weekend circuit can be notified. They can then choose to join, coordinate, or adjust their own plan.
+
+4. **Generated preview cards**
+
+   Before the final plan, Vibin can show a few visual itinerary cards so users feel excited about the direction of the outing.
+
+5. **Shareable itinerary cards**
+
+   Users should be able to export a clean weekend card that can be sent to friends or posted as an Instagram-story style image.
+
+6. **Send to friends**
+
+   Add a lightweight sharing flow so users can send a plan to friends and coordinate without copying long text manually.
+
+7. **More personality**
+
+   Add richer mood styling, small motion details, rotating suggestions, and more playful plan language while keeping the interface simple.
 
 ## Current Status
 

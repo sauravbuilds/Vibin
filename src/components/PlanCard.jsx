@@ -103,15 +103,15 @@ export default function PlanCard({ slot, index }) {
       {/* Card */}
       <div style={{
         flex: 1,
-        background: 'rgba(255,255,255,0.03)',
-        border: '0.5px solid rgba(255,255,255,0.07)',
+        background: 'rgba(255,255,255,0.055)',
+        border: '0.5px solid rgba(255,255,255,0.14)',
         borderRadius: '12px',
         padding: '20px 24px',
         backdropFilter: 'blur(12px)',
         transition: 'border-color 0.2s',
       }}
         onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(200,240,74,0.2)'}
-        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'}
+        onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.14)'}
       >
         {/* Top row */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', marginBottom: '10px' }}>
@@ -130,7 +130,7 @@ export default function PlanCard({ slot, index }) {
         {/* Description */}
         <p style={{
           fontSize: '13.5px',
-          color: 'rgba(240,242,245,0.5)',
+          color: 'rgba(240,242,245,0.72)',
           lineHeight: 1.75,
           marginBottom: '12px',
           fontWeight: 300,
@@ -141,7 +141,7 @@ export default function PlanCard({ slot, index }) {
         {/* Why */}
         <p style={{
           fontSize: '12.5px',
-          color: 'rgba(200,240,74,0.6)',
+          color: 'rgba(200,240,74,0.78)',
           fontStyle: 'italic',
           fontFamily: "'Cormorant Garamond', serif",
           borderLeft: '1.5px solid rgba(200,240,74,0.2)',
@@ -169,22 +169,22 @@ export default function PlanCard({ slot, index }) {
 
         {/* Meta */}
         <div style={{ display: 'flex', gap: '18px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.35)', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <span style={{ color: 'rgba(240,242,245,0.65)', fontWeight: 400 }}>{costLabel}</span>
+          <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.55)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span style={{ color: 'rgba(240,242,245,0.82)', fontWeight: 500 }}>{costLabel}</span>
           </span>
           {item.dur && (
-            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.35)' }}>
-              <span style={{ color: 'rgba(240,242,245,0.65)' }}>{item.dur}</span>
+            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.55)' }}>
+              <span style={{ color: 'rgba(240,242,245,0.82)' }}>{item.dur}</span>
             </span>
           )}
           {item.crowd && (
-            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.35)' }}>
-              <span style={{ color: 'rgba(240,242,245,0.65)' }}>{item.crowd} crowd</span>
+            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.55)' }}>
+              <span style={{ color: 'rgba(240,242,245,0.82)' }}>{item.crowd} crowd</span>
             </span>
           )}
           {item.cuisine && (
-            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.35)' }}>
-              <span style={{ color: 'rgba(240,242,245,0.65)' }}>{item.cuisine}</span>
+            <span style={{ fontSize: '11.5px', color: 'rgba(240,242,245,0.55)' }}>
+              <span style={{ color: 'rgba(240,242,245,0.82)' }}>{item.cuisine}</span>
             </span>
           )}
           {isFood && !item.veg && (

@@ -38,7 +38,7 @@ export default function AgentTrace({ lines }) {
         fontSize: '10px',
         letterSpacing: '0.22em',
         textTransform: 'uppercase',
-        color: 'rgba(200,240,74,0.5)',
+        color: 'rgba(200,240,74,0.72)',
         marginBottom: '12px',
         fontWeight: 400,
       }}>
@@ -48,8 +48,8 @@ export default function AgentTrace({ lines }) {
       <div
         ref={boxRef}
         style={{
-          background: 'rgba(0,0,0,0.4)',
-          border: '0.5px solid rgba(255,255,255,0.07)',
+          background: 'rgba(0,0,0,0.5)',
+          border: '0.5px solid rgba(255,255,255,0.14)',
           borderRadius: '10px',
           padding: '18px 22px',
           fontFamily: "'DM Mono', monospace",
@@ -81,7 +81,7 @@ export default function AgentTrace({ lines }) {
             <span>
               <span style={{ color: '#C8F04A', fontWeight: 500 }}>[{line.label}]</span>
               {' '}
-              <span style={{ color: 'rgba(240,242,245,0.42)' }}>{line.msg}</span>
+              <span style={{ color: 'rgba(240,242,245,0.66)' }}>{line.msg}</span>
             </span>
           </div>
         ))}

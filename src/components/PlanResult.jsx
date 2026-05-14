@@ -40,7 +40,7 @@ export default function PlanResult({ plan, prefs, onReset }) {
           fontSize: '10px',
           letterSpacing: '0.22em',
           textTransform: 'uppercase',
-          color: 'rgba(200,240,74,0.5)',
+          color: 'rgba(200,240,74,0.72)',
           marginBottom: '10px',
           fontWeight: 400,
         }}>
@@ -68,9 +68,9 @@ export default function PlanResult({ plan, prefs, onReset }) {
               fontSize: '11px',
               padding: '5px 13px',
               borderRadius: '14px',
-              background: 'rgba(255,255,255,0.05)',
-              border: '0.5px solid rgba(255,255,255,0.08)',
-              color: 'rgba(240,242,245,0.55)',
+              background: 'rgba(255,255,255,0.07)',
+              border: '0.5px solid rgba(255,255,255,0.16)',
+              color: 'rgba(240,242,245,0.76)',
               letterSpacing: '0.03em',
             }}>
               {pill.label}
@@ -99,8 +99,8 @@ export default function PlanResult({ plan, prefs, onReset }) {
       {/* Cost summary */}
       <div style={{
         marginTop: '36px',
-        background: 'rgba(255,255,255,0.03)',
-        border: `0.5px solid ${overBudget ? 'rgba(240,192,96,0.25)' : 'rgba(255,255,255,0.07)'}`,
+        background: 'rgba(255,255,255,0.055)',
+        border: `0.5px solid ${overBudget ? 'rgba(240,192,96,0.38)' : 'rgba(255,255,255,0.14)'}`,
         borderRadius: '12px',
         padding: '26px 30px',
         display: 'flex',
@@ -114,7 +114,7 @@ export default function PlanResult({ plan, prefs, onReset }) {
             fontSize: '10px',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            color: 'rgba(240,242,245,0.28)',
+            color: 'rgba(240,242,245,0.5)',
             marginBottom: '5px',
             fontWeight: 400,
           }}>
@@ -146,10 +146,10 @@ export default function PlanResult({ plan, prefs, onReset }) {
             { label: 'Transport (est.)', value: `Rs.${transportCost.toLocaleString('en-IN')}` },
           ].map((item, i) => (
             <div key={i}>
-              <div style={{ fontSize: '10px', color: 'rgba(240,242,245,0.28)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: '10px', color: 'rgba(240,242,245,0.5)', letterSpacing: '0.07em', textTransform: 'uppercase' }}>
                 {item.label}
               </div>
-              <div style={{ fontSize: '16px', color: 'rgba(240,242,245,0.75)', fontWeight: 300, marginTop: '3px' }}>
+              <div style={{ fontSize: '16px', color: 'rgba(240,242,245,0.88)', fontWeight: 400, marginTop: '3px' }}>
                 {item.value}
               </div>
             </div>

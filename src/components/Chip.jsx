@@ -7,14 +7,14 @@ export default function Chip({ label, selected, onClick, disabled = false }) {
       onClick={onClick}
       disabled={disabled}
       style={{
-        background: selected ? 'rgba(200, 240, 74, 0.12)' : 'rgba(255,255,255,0.035)',
-        border: `0.5px solid ${selected ? 'rgba(200, 240, 74, 0.5)' : 'rgba(255,255,255,0.08)'}`,
+        background: selected ? 'rgba(200, 240, 74, 0.16)' : 'rgba(255,255,255,0.06)',
+        border: `0.5px solid ${selected ? 'rgba(200, 240, 74, 0.68)' : 'rgba(255,255,255,0.16)'}`,
         borderRadius: '20px',
         padding: '7px 16px',
         fontSize: '13px',
         fontFamily: "'Syne', sans-serif",
-        fontWeight: 300,
-        color: selected ? '#C8F04A' : 'rgba(240,242,245,0.5)',
+        fontWeight: selected ? 500 : 400,
+        color: selected ? '#D8FF5A' : 'rgba(240,242,245,0.72)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         transition: 'all 0.2s ease',
         userSelect: 'none',
@@ -24,14 +24,14 @@ export default function Chip({ label, selected, onClick, disabled = false }) {
       }}
       onMouseEnter={e => {
         if (!selected && !disabled) {
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
-          e.currentTarget.style.color = 'rgba(240,242,245,0.75)';
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.28)';
+          e.currentTarget.style.color = 'rgba(240,242,245,0.9)';
         }
       }}
       onMouseLeave={e => {
         if (!selected && !disabled) {
-          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-          e.currentTarget.style.color = 'rgba(240,242,245,0.5)';
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.16)';
+          e.currentTarget.style.color = 'rgba(240,242,245,0.72)';
         }
       }}
     >
