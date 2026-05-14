@@ -6,6 +6,12 @@ The goal is not to overload the user with choices. Vibin asks a few focused ques
 
 Live app: https://vibin-xi.vercel.app/
 
+## Submission
+
+- Live URL: https://vibin-xi.vercel.app/
+- Focus city: Bangalore
+- Repo includes local setup instructions below.
+
 ## What It Does
 
 - Plans a weekend outing in Bangalore.
@@ -38,6 +44,58 @@ This makes the plan more realistic and easier for the user to manage.
 - OpenRouter API for AI planning and web-search powered recommendations
 - Local fallback data for Bangalore
 
+## Run Locally
+
+Prerequisites:
+
+- Node.js installed
+- npm installed
+- OpenRouter API key
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env` file in the project root:
+
+```env
+OPENROUTER_API_KEY=your_openrouter_key_here
+OPENROUTER_MODEL=openai/gpt-4o-mini
+```
+
+Start the app:
+
+```bash
+npm.cmd start
+```
+
+This starts:
+
+- React frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8787`
+
+If port `3000` is already busy, React may ask to run on `3001`.
+
+Check backend health:
+
+```text
+http://localhost:8787/api/health
+```
+
+Create a production build:
+
+```bash
+npm.cmd run build
+```
+
+Serve the production build locally:
+
+```bash
+npm.cmd run serve
+```
+
 ## How Planning Works
 
 1. The user enters budget, available time, mood, interests, constraints, and optional notes.
@@ -52,6 +110,12 @@ This makes the plan more realistic and easier for the user to manage.
    - estimated transport cost
    - total estimated cost
 6. If live search fails, the app uses local Bangalore fallback data.
+
+## AI Tools Used
+
+I used AI coding tools to quickly iterate on the React UI, backend planner flow, and prompt structure.
+AI also helped debug local API routing, fallback behavior, and budget/transport logic.
+Final decisions were guided by product simplicity: a usable hosted planner with trace, fallback, and practical recommendations.
 
 ## Future Advancements
 
