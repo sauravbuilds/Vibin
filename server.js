@@ -9,8 +9,9 @@ const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || process.env.REACT_APP_ANTHROPIC_KEY;
 const PROVIDER = OPENROUTER_API_KEY ? 'openrouter' : 'anthropic';
 const MODEL = OPENROUTER_API_KEY
-  ? (process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini')
+  ? (process.env.OPENROUTER_MODEL || 'openrouter/free')
   : (process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514');
+const USE_OPENROUTER_WEB = process.env.OPENROUTER_USE_WEB === 'true' && MODEL !== 'openrouter/free';
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -174,7 +175,11 @@ function estimateTransportFallback(prefs, slots) {
 
 function makePlannerPrompt(input) {
   const { prefs, freetext } = input;
-  return `Plan a real, current 4-8 stop Bangalore weekend route using web search first.
+  const searchMode = PROVIDER === 'openrouter' && !USE_OPENROUTER_WEB
+    ? 'Use your local Bangalore knowledge and the provided planning constraints. Do not claim that you performed live web search.'
+    : 'Use web search first for current local recommendations.';
+
+  return `Plan a real, current 4-8 stop Bangalore weekend route. ${searchMode}
 
 Use every user signal:
 - City: Bangalore only
@@ -189,7 +194,7 @@ Use every user signal:
 - Indoors only: ${prefs.indoorOnly ? 'yes' : 'no'}
 - Outdoors only: ${prefs.outdoorOnly ? 'yes' : 'no'}
 
-Search the web for places near the notes/location when a location is provided, especially HSR Layout Sector 1, Koramangala, Bellandur, Indiranagar, BTM, and nearby Bangalore areas. Prefer real venues with current evidence. Do not use a static mock catalogue unless search fails.
+Prioritize places near the notes/location when a location is provided, especially HSR Layout Sector 1, Koramangala, Bellandur, Indiranagar, BTM, and nearby Bangalore areas. Prefer real, specific venues. Do not invent impossible routes.
 
 Budget philosophy:
 - If budget is above Rs.1,500, do not try to spend the full budget.
@@ -324,6 +329,29 @@ async function planWithOpenRouter(input) {
     throw err;
   }
 
+  const body = {
+    model: MODEL,
+    max_tokens: 3500,
+    temperature: 0.35,
+    response_format: { type: 'json_object' },
+    messages: [
+      {
+        role: 'system',
+        content: USE_OPENROUTER_WEB
+          ? 'You are Vibin, a Bangalore weekend-planning agent. Use real-time web search when available, then produce compact validated JSON only.'
+          : 'You are Vibin, a Bangalore weekend-planning agent. Produce compact validated JSON only using reliable local knowledge and the provided constraints.',
+      },
+      {
+        role: 'user',
+        content: makePlannerPrompt(input) + (input.retryHint ? `\n\nCorrection required: ${input.retryHint}` : ''),
+      },
+    ],
+  };
+
+  if (USE_OPENROUTER_WEB) {
+    body.plugins = [{ id: 'web' }];
+  }
+
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -332,23 +360,7 @@ async function planWithOpenRouter(input) {
       'HTTP-Referer': 'http://localhost:3000',
       'X-OpenRouter-Title': 'Vibin Weekend Planner',
     },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 3500,
-      temperature: 0.35,
-      response_format: { type: 'json_object' },
-      plugins: [{ id: 'web' }],
-      messages: [
-        {
-          role: 'system',
-          content: 'You are Vibin, a Bangalore weekend-planning agent. Use real-time web search when available, then produce compact validated JSON only.',
-        },
-        {
-          role: 'user',
-          content: makePlannerPrompt(input) + (input.retryHint ? `\n\nCorrection required: ${input.retryHint}` : ''),
-        },
-      ],
-    }),
+    body: JSON.stringify(body),
   });
 
   const data = await response.json().catch(() => ({}));

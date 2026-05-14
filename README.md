@@ -17,7 +17,7 @@ Live app: https://vibin-xi.vercel.app/
 - Plans a weekend outing in Bangalore.
 - Uses user inputs such as mood, interests, budget, time, constraints, and free-text notes.
 - Supports constraints like vegetarian, avoid crowds, indoors only, outdoors only, child friendly, pet friendly, wheelchair accessible, and no alcohol.
-- Uses AI/web search through a backend API to find current recommendations.
+- Uses an AI planner through a backend API to create recommendations.
 - Falls back to local Bangalore mock data if the live planner is unavailable.
 - Keeps the UI simple so users can move from input to plan without confusion.
 
@@ -41,7 +41,7 @@ This makes the plan more realistic and easier for the user to manage.
 - React
 - Create React App
 - Node.js backend server
-- OpenRouter API for AI planning and web-search powered recommendations
+- OpenRouter API for AI planning
 - Local fallback data for Bangalore
 
 ## Run Locally
@@ -62,7 +62,13 @@ Create a `.env` file in the project root:
 
 ```env
 OPENROUTER_API_KEY=your_openrouter_key_here
-OPENROUTER_MODEL=openai/gpt-4o-mini
+OPENROUTER_MODEL=openrouter/free
+```
+
+The default model uses OpenRouter's free model router. If you want paid web-search powered planning later, use a paid model and set:
+
+```env
+OPENROUTER_USE_WEB=true
 ```
 
 Start the app:
@@ -100,7 +106,7 @@ npm.cmd run serve
 
 1. The user enters budget, available time, mood, interests, constraints, and optional notes.
 2. The frontend combines all user inputs into one planning request.
-3. The backend sends the request to the AI/web-search planner.
+3. The backend sends the request to the AI planner.
 4. The planner returns a structured weekend plan.
 5. The app validates and displays:
    - activity stops
@@ -109,7 +115,7 @@ npm.cmd run serve
    - estimated food cost
    - estimated transport cost
    - total estimated cost
-6. If live search fails, the app uses local Bangalore fallback data.
+6. If the AI planner fails or is rate-limited, the app uses local Bangalore fallback data.
 
 ## AI Tools Used
 
