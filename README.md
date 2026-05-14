@@ -1,0 +1,72 @@
+# Vibin
+
+Vibin is a simple weekend-planning app for Bangalore. It helps users create a short, practical plan based on their mood, available time, budget, interests, location notes, and constraints.
+
+The goal is not to overload the user with choices. Vibin asks a few focused questions, searches for relevant places, and returns a clean route-like plan with activities, food stops, estimated cost, and transport cost.
+
+## What It Does
+
+- Plans a weekend outing in Bangalore.
+- Uses user inputs such as mood, interests, budget, time, constraints, and free-text notes.
+- Supports constraints like vegetarian, avoid crowds, indoors only, outdoors only, child friendly, pet friendly, wheelchair accessible, and no alcohol.
+- Uses AI/web search through a backend API to find current recommendations.
+- Falls back to local Bangalore mock data if the live planner is unavailable.
+- Keeps the UI simple so users can move from input to plan without confusion.
+
+## Budget Philosophy
+
+Vibin does not try to spend the full user budget.
+
+If the budget is above roughly `Rs.1,500`, the planner should usually use only around `30-40%` of the budget. This leaves room for real-world extra spending such as:
+
+- transport changes
+- snacks or drinks
+- surge pricing
+- entry fee differences
+- impulse purchases
+- tips, parking, or small add-ons
+
+This makes the plan more realistic and easier for the user to manage.
+
+## Tech Stack
+
+- React
+- Create React App
+- Node.js backend server
+- OpenRouter API for AI planning and web-search powered recommendations
+- Local fallback data for Bangalore
+
+## How Planning Works
+
+1. The user enters budget, available time, mood, interests, constraints, and optional notes.
+2. The frontend combines all user inputs into one planning request.
+3. The backend sends the request to the AI/web-search planner.
+4. The planner returns a structured weekend plan.
+5. The app validates and displays:
+   - activity stops
+   - food stops
+   - estimated activity cost
+   - estimated food cost
+   - estimated transport cost
+   - total estimated cost
+6. If live search fails, the app uses local Bangalore fallback data.
+
+## Future Advancements
+
+1. **Google Maps circuits**
+
+   Each plan should become a proper route circuit. Every stop will include a Google Maps link, and the app will arrange places in a sensible travel order.
+
+2. **Place reviews**
+
+   Each recommendation should show useful review signals, such as rating, review count, common complaints, and why the place is worth visiting.
+
+3. **Public and private plans**
+
+   Users should be able to mark their plan as public or private.
+
+   If a plan is public, other users with a similar route, mood, or weekend circuit can be notified. They can then choose to join, coordinate, or adjust their own plan.
+
+## Current Status
+
+Vibin is an early version focused on simple weekend planning for Bangalore. The main product direction is to keep the interface lightweight while making the recommendations more useful, current, and route-aware over time.
