@@ -1,6 +1,6 @@
 # Vibin
 
-Vibin is a simple weekend-planning app for Bangalore. It helps users create a short, practical plan based on their mood, available time, budget, interests, location notes, and constraints.
+Vibin (Vibe In) is a simple weekend-planning app for Bangalore. It helps users create a short, practical plan based on their mood, available time, budget, interests, location notes, and constraints.
 
 The goal is not to overload the user with choices. Vibin asks a few focused questions, searches for relevant places, and returns a clean route-like plan with activities, food stops, estimated cost, and transport cost.
 
