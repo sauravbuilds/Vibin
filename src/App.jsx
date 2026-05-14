@@ -205,18 +205,18 @@ export default function App() {
         ? 'All form fields and notes combined into one planning prompt'
         : 'Form fields combined into one planning prompt');
 
-    addTrace('running', 'webSearchPlanner', 'Searching the web for current Bangalore places that match the full prompt');
+    addTrace('running', 'aiPlanner', 'Asking the AI planner to create a Bangalore plan from the full prompt');
 
     let result;
     let usedFallback = false;
 
     try {
       result = await getWebPlan(parsedPrefs, finalNotes);
-      addTrace('ok', 'webSearchPlanner', 'Web results received - using live recommendations');
+      addTrace('ok', 'aiPlanner', 'AI planner returned recommendations');
     } catch (err) {
       usedFallback = true;
       console.error('[Vibin] Web planner failed, using fallback data:', err);
-      addTrace('warn', 'webSearchPlanner', `Web search failed: ${err.message}. Using fallback data only now.`);
+      addTrace('warn', 'aiPlanner', `AI planner failed: ${err.message}. Using fallback data only now.`);
       try {
         result = buildFallbackPlan(parsedPrefs);
       } catch (fallbackErr) {

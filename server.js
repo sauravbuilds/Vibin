@@ -331,9 +331,8 @@ async function planWithOpenRouter(input) {
 
   const body = {
     model: MODEL,
-    max_tokens: 3500,
+    max_tokens: MODEL === 'openrouter/free' ? 1600 : 3500,
     temperature: 0.35,
-    response_format: { type: 'json_object' },
     messages: [
       {
         role: 'system',
@@ -350,6 +349,7 @@ async function planWithOpenRouter(input) {
 
   if (USE_OPENROUTER_WEB) {
     body.plugins = [{ id: 'web' }];
+    body.response_format = { type: 'json_object' };
   }
 
   const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
